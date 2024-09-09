@@ -614,16 +614,6 @@ OrgChart._defaultConfig = function(t) {
 }, OrgChart.prototype.canRemove = function(t) {
     var e = this.getNode(t);
     return !!e && (!e.hasPartners && !e.hasAssistants)
-}, void 0 === OrgChart && (OrgChart = {}), OrgChart._ajax = function(t, e, r, i, a) {
-    null == i && (i = "arraybuffer");
-    var n = new XMLHttpRequest;
-    n.onload = function(t) {
-        4 == n.readyState && 200 === this.status && (null == t.target ? a(this.response) : a(t.target.response))
-    }, n.onerror = function(t) {
-        a({
-            error: t
-        })
-    }, n.open(e, t), n.responseType = i, n.setRequestHeader("Content-Type", "application/json"), null == r ? n.send() : n.send(r)
 }, void 0 === OrgChart && (OrgChart = {}), OrgChart.animate = function(t, e, r, i, a, n, o) {
     var l, s = 10,
         h = 1,
@@ -4765,26 +4755,6 @@ OrgChart._defaultConfig = function(t) {
             a.success && e.setAttribute(r, a.result), t == n - 1 && i()
         }))
     }()
-}, OrgChart._getDataUri = function(t, e) {
-    if (-1 != t.indexOf("base64")) e({
-        success: !1
-    });
-    else {
-        var r = new XMLHttpRequest;
-        r.open("GET", t), r.responseType = "blob", r.onload = function() {
-            200 === r.status ? i.readAsDataURL(r.response) : 404 === r.status && e({
-                success: !1,
-                result: r.status
-            })
-        };
-        var i = new FileReader;
-        i.onloadend = function() {
-            e({
-                success: !0,
-                result: i.result
-            })
-        }, r.send()
-    }
 }, OrgChart._convertStringToArray = function(t, e) {
     return -1 != OrgChart.ARRAY_FIELDS.indexOf(t) ? OrgChart.isNEU(e) ? [] : e.split(",") : e
 }, OrgChart._convertArrayToString = function(t) {
@@ -6687,21 +6657,5 @@ void 0 === OrgChart.remote && (OrgChart.remote = {}), OrgChart.LIMIT_NODES = !0,
     else {
         for (var a = 0; a < t.length; a++) OrgChart.remote._fromResDTO(t[a], e, 0, t, r);
         i()
-    }
-}, OrgChart.remote._findRegion = function(t) {
-    var e = OrgChart.localStorage.getItem(OrgChart.FUNC_URL_NAME);
-    if (e) t(e);
-    else {
-        for (var r = ["defunc2", "cusfunc2", "bsfunc2", "acfunc2", "kcfunc2", "safunc2", "wifunc2"], i = [], a = 0; a < r.length; a++) i.push(new XMLHttpRequest);
-        for (a = 0; a < r.length; a++) ! function() {
-            var e = "https://" + r[a] + OrgChart.SERVER_PREFIX,
-                n = i[a];
-            n.onreadystatechange = function() {
-                if (4 == this.readyState && 200 == this.status) {
-                    OrgChart.localStorage.setItem(OrgChart.FUNC_URL_NAME, e), t(e);
-                    for (var r = 0; r < i.length; r++) i[r].abort()
-                }
-            }, n.open("GET", e, !0), n.send()
-        }()
     }
 };
